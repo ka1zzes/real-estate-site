@@ -1,57 +1,10 @@
-/* ============================================================
-   ЕДИНЫЙ ИСТОЧНИК ДАННЫХ
-   Правишь здесь — меняется на сайте.
-   Картинки кидаешь по путям ниже; если файла нет — покажется
-   аккуратная SVG-заглушка.
-   ============================================================ */
-
 export const complexes = [
-  {
-    id: "north-park",
-    name: "Северный Парк",
-    class: "Бизнес-класс",
-    address: "Москва, Северный район, ул. Парковая, 12",
-    coords: [55.8558, 37.5173], // [широта, долгота] — замени на реальные
-    cover: "assets/img/complexes/north-park/cover.jpg",
-    hero: "assets/img/complexes/north-park/hero.jpg",
-    desc: "Клубный дом у парка: панорамные окна, тихий двор, своя оранжерея.",
-  },
-  {
-    id: "river-quarter",
-    name: "Речной Квартал",
-    class: "Комфорт-класс",
-    address: "Москва, Набережная, ул. Речная, 4",
-    coords: [55.7358, 37.6373],
-    cover: "assets/img/complexes/river-quarter/cover.jpg",
-    hero: "assets/img/complexes/river-quarter/hero.jpg",
-    desc: "Малоэтажные дома на набережной: террасы, вода, велодорожки.",
-  },
-  {
-    id: "atlas",
-    name: "Атлас",
-    class: "Премиум",
-    address: "Москва, Центр, ул. Атласная, 1",
-    coords: [55.7558, 37.6173],
-    cover: "assets/img/complexes/atlas/cover.jpg",
-    hero: "assets/img/complexes/atlas/hero.jpg",
-    desc: "Клубный дом в центре: 9 этажей, консьерж, приватный лифт.",
-  },
-  {
-    id: "sosny",
-    name: "Сосны",
-    class: "Загородный",
-    address: "Московская обл., Сосновый бор, 7",
-    coords: [55.9158, 37.4173],
-    cover: "assets/img/complexes/sosny/cover.jpg",
-    hero: "assets/img/complexes/sosny/hero.jpg",
-    desc: "Таунхаусы в лесу: свой вход, терраса, парковка у дома.",
-  },
+  { id: "north-park", name: "Северный Парк", class: "Бизнес-класс", address: "Москва, Северный район, ул. Парковая, 12", coords: [55.8558, 37.5173], cover: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80", hero: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1600&q=80", desc: "Клубный дом у парка: панорамные окна, тихий двор, своя оранжерея." },
+  { id: "river-quarter", name: "Речной Квартал", class: "Комфорт-класс", address: "Москва, Набережная, ул. Речная, 4", coords: [55.7358, 37.6373], cover: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80", hero: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1600&q=80", desc: "Малоэтажные дома на набережной: террасы, вода, велодорожки." },
+  { id: "atlas", name: "Атлас", class: "Премиум", address: "Москва, Центр, ул. Атласная, 1", coords: [55.7558, 37.6173], cover: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80", hero: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1600&q=80", desc: "Клубный дом в центре: 9 этажей, консьерж, приватный лифт." },
+  { id: "sosny", name: "Сосны", class: "Загородный", address: "Московская обл., Сосновый бор, 7", coords: [55.9158, 37.4173], cover: "https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=800&q=80", hero: "https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=1600&q=80", desc: "Таунхаусы в лесу: свой вход, терраса, парковка у дома." },
 ];
 
-/* ------------------------------------------------------------
-   Генератор квартир: 6 на ЖК.
-   Площади/этажи/цены — правь свободно.
-   ------------------------------------------------------------ */
 const apartmentSeeds = {
   "north-park": [
     { num: "101", rooms: 1, area: 42, floor: 3, pricePerM2: 310000, tag: "Свободна" },
@@ -75,34 +28,31 @@ const apartmentSeeds = {
   ],
 };
 
-/* Сборка полного списка квартир с путями к фото/плану */
-export const apartments = complexes.flatMap((c) =>
-  apartmentSeeds[c.id].map((s) => {
+const interiorPhotos = [
+  "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80",
+  "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
+  "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=800&q=80",
+  "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80",
+  "https://images.unsplash.com/photo-1600121848594-d8644e57abab?auto=format&fit=crop&w=800&q=80",
+  "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=800&q=80",
+  "https://images.unsplash.com/photo-1600573472550-8090b5e0745e?auto=format&fit=crop&w=800&q=80",
+  "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80"
+];
+
+export const apartments = complexes.flatMap((c, cIndex) =>
+  apartmentSeeds[c.id].map((s, aIndex) => {
     const id = `a${s.num}`;
+    const p1 = interiorPhotos[(cIndex + aIndex) % interiorPhotos.length];
+    const p2 = interiorPhotos[(cIndex + aIndex + 1) % interiorPhotos.length];
+    const p3 = interiorPhotos[(cIndex + aIndex + 2) % interiorPhotos.length];
+
     return {
-      id,
-      complexId: c.id,
-      complexName: c.name,
-      num: s.num,
-      rooms: s.rooms,
-      area: s.area,
-      floor: s.floor,
-      pricePerM2: s.pricePerM2,
-      price: s.area * s.pricePerM2,
-      tag: s.tag,
-      title: `${s.rooms}-комнатная, ${s.area} м²`,
-      coords: c.coords,
-      address: c.address,
-      photos: [
-        `assets/img/apartments/${c.id}/${id}/photo-1.jpg`,
-        `assets/img/apartments/${c.id}/${id}/photo-2.jpg`,
-        `assets/img/apartments/${c.id}/${id}/photo-3.jpg`,
-      ],
-      plan: `assets/img/apartments/${c.id}/${id}/plan.svg`,
+      id, complexId: c.id, complexName: c.name, num: s.num, rooms: s.rooms, area: s.area, floor: s.floor, pricePerM2: s.pricePerM2, price: s.area * s.pricePerM2, tag: s.tag,
+      title: `${s.rooms}-комнатная, ${s.area} м²`, coords: c.coords, address: c.address,
+      photos: [p1, p2, p3],
+      plan: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80",
     };
   })
 );
 
-/* Хелпер форматирования цены */
-export const formatPrice = (value) =>
-  new Intl.NumberFormat("ru-RU").format(Math.round(value)) + " ₽";
+export const formatPrice = (value) => new Intl.NumberFormat("ru-RU").format(Math.round(value)) + " ₽";
