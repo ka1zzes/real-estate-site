@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Атлас Недвижимость — квартиры в авторских ЖК</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ШАПКА -->
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="#home" class="logo nav-link" aria-label="На главную">
+        <span class="logo__mark" aria-hidden="true"></span>
+        <span class="logo__text">Атлас<span>Недвижимость</span></span>
+      </a>
+      <nav class="nav" aria-label="Основная навигация">
+        <a href="#home" class="nav-link active-link">ЖК</a>
+        <a href="#apartments" class="nav-link">Квартиры</a>
+        <a href="#calculator" class="nav-link">Расчёт</a>
+        <a href="#furniture" class="nav-link">Мебель</a>
+        <a href="#request" class="nav-link">Заявка</a>
+      </nav>
+      <button class="burger" id="burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobile-menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu">
+      <a href="#home" class="nav-link">ЖК</a>
+      <a href="#apartments" class="nav-link">Квартиры</a>
+      <a href="#calculator" class="nav-link">Расчёт</a>
+      <a href="#furniture" class="nav-link">Мебель</a>
+      <a href="#request" class="nav-link">Заявка</a>
+    </div>
+  </header>
+
+  <!-- КОНТЕЙНЕР ВКЛАДОК -->
+  <main style="padding-top: 72px; min-height: 100vh;">
+    
+    <!-- ВКЛАДКА 1: ЖК (ГЛАВНАЯ) -->
+    <div id="tab-home" class="tab-content active">
+      <section class="hero" id="hero">
+        <div class="container hero__inner">
+          <p class="hero__eyebrow">Авторские жилые комплексы</p>
+          <h1 class="hero__title">Дом, в который<br><em>хочется</em> вернуться</h1>
+          <p class="hero__lead">Четыре комплекса. Выбирайте квартиры, считайте стоимость и оставляйте заявку.</p>
+          <div class="hero__actions">
+            <a href="#apartments" class="btn btn--primary nav-link">Смотреть квартиры</a>
+            <a href="#calculator" class="btn btn--ghost nav-link">Рассчитать стоимость</a>
+          </div>
+        </div>
+        <div class="hero__bg" aria-hidden="true"></div>
+      </section>
+      <section class="section" id="complexes">
+        <div class="container">
+          <div class="section__head">
+            <p class="section__eyebrow">01 — Комплексы</p>
+            <h2 class="section__title">Наши ЖК</h2>
+          </div>
+          <div class="complexes" id="complexes-grid" role="list"></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ВКЛАДКА 2: КВАРТИРЫ -->
+    <div id="tab-apartments" class="tab-content">
+      <section class="section section--alt">
+        <div class="container">
+          <div class="section__head">
+            <p class="section__eyebrow">02 — Квартиры</p>
+            <h2 class="section__title" id="apartments-title">Все квартиры</h2>
+            <p class="section__lead" id="apartments-lead">Фото и планы. Нажмите на карточку, чтобы открыть подробности и карту.</p>
+          </div>
+          <div class="apartments" id="apartments-grid" role="list"></div>
+        </div>
+      </section>
+    </div>
+
+           <!-- ВКЛАДКА 3: РАСЧЁТ -->
+    <div id="tab-calculator" class="tab-content">
+      <section class="section">
+        <div class="container">
+          <div class="section__head">
+            <p class="section__eyebrow">03 — Расчёт</p>
+            <h2 class="section__title">Калькулятор стоимости</h2>
+            <p class="section__lead">Настройте параметры будущей квартиры, чтобы узнать итоговую стоимость.</p>
+          </div>
+          
+          <div class="calculator-layout">
+            <!-- Левая часть: настройки -->
+            <div class="calc-controls">
+              
+              <div class="calc-group">
+                <label class="calc-label">Жилой комплекс</label>
+                <select id="calc-complex" class="calc-select"></select>
+              </div>
+
+              <div class="calc-group">
+                <div class="calc-label-row">
+                  <label class="calc-label">Площадь, м²</label>
+                  <span class="calc-value" id="calc-area-val">60</span>
+                </div>
+                <input type="range" id="calc-area" min="30" max="150" value="60" class="calc-range">
+              </div>
+
+              <div class="calc-group">
+                <div class="calc-label-row">
+                  <label class="calc-label">Этаж</label>
+                  <span class="calc-value" id="calc-floor-val">5</span>
+                </div>
+                <input type="range" id="calc-floor" min="1" max="25" value="5" class="calc-range">
+              </div>
+
+              <div class="calc-group">
+                <label class="calc-label">Отделка</label>
+                <div class="calc-options" id="calc-finish">
+                  <button class="calc-option active" data-value="0">Черновая</button>
+                  <button class="calc-option" data-value="15000">Чистовая</button>
+                  <button class="calc-option" data-value="35000">С мебелью</button>
+                </div>
+              </div>
+
+              <div class="calc-group">
+                <label class="calc-checkbox">
+                  <input type="checkbox" id="calc-parking" value="1500000">
+                  <span>Подземный паркинг (+1 500 000 ₽)</span>
+                </label>
+              </div>
+
+            </div>
+
+            <!-- Правая часть: итог -->
+            <div class="calc-total-card">
+              <p class="calc-total-label">Итоговая стоимость</p>
+              <div class="calc-total-price" id="calc-total">0 ₽</div>
+              <div class="calc-total-breakdown" id="calc-breakdown">
+                <!-- Детализация -->
+              </div>
+              <a href="#request" class="btn btn--primary nav-link" style="width: 100%; margin-top: 24px;">Оставить заявку</a>
+            </div>
+          </div>
+
+          <!-- Примечание -->
+          <div class="calc-disclaimer">
+            <p><strong>Как рассчитывается стоимость:</strong></p>
+            <ul>
+              <li>Базовая цена = площадь × цена за м² выбранного ЖК.</li>
+              <li>Наценка за этаж: каждый этаж добавляет 0.5% к базовой стоимости (чем выше, тем лучше вид).</li>
+              <li>Отделка: черновая входит в базовую цену; чистовая добавляет 15 000 ₽/м², с мебелью — 35 000 ₽/м².</li>
+              <li>Подземный паркинг (при наличии) — фиксированные 1 500 000 ₽.</li>
+              <li><em>Итоговая стоимость является предварительной. Точная цена фиксируется в договоре.</em></li>
+            </ul>
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+            <!-- ВКЛАДКА 4: МЕБЕЛЬ -->
+    <div id="tab-furniture" class="tab-content">
+      <section class="section section--alt">
+        <div class="container">
+          <div class="section__head">
+            <p class="section__eyebrow">04 — Мебель</p>
+            <h2 class="section__title">Подберём мебель под вашу квартиру</h2>
+            <p class="section__lead">Соберите идеальную обстановку. Выбирайте готовые решения для каждой комнаты, и стоимость автоматически добавится к вашей смете.</p>
+          </div>
+
+          <div class="furniture-layout">
+            <!-- Левая часть: Выбор комнат -->
+            <div class="furniture-rooms">
+              
+              <!-- Кухня -->
+              <div class="furniture-room">
+                <div class="furniture-room__head">
+                  <h3>Кухня</h3>
+                </div>
+                <div class="furniture-options" data-room="kitchen">
+                  <button class="furniture-option active" data-price="0">Без мебели</button>
+                  <button class="furniture-option" data-price="150000">Базовая</button>
+                  <button class="furniture-option" data-price="450000">Премиум</button>
+                </div>
+              </div>
+
+              <!-- Гостиная -->
+              <div class="furniture-room">
+                <div class="furniture-room__head">
+                  <h3>Гостиная</h3>
+                </div>
+                <div class="furniture-options" data-room="living">
+                  <button class="furniture-option active" data-price="0">Без мебели</button>
+                  <button class="furniture-option" data-price="200000">Базовая</button>
+                  <button class="furniture-option" data-price="600000">Премиум</button>
+                </div>
+              </div>
+
+              <!-- Спальня -->
+              <div class="furniture-room">
+                <div class="furniture-room__head">
+                  <h3>Спальня</h3>
+                </div>
+                <div class="furniture-options" data-room="bedroom">
+                  <button class="furniture-option active" data-price="0">Без мебели</button>
+                  <button class="furniture-option" data-price="180000">Базовая</button>
+                  <button class="furniture-option" data-price="500000">Премиум</button>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Правая часть: Итог и Визуал -->
+            <div class="furniture-total-card">
+              <div class="furniture-visual" id="furniture-visual">
+                <!-- Здесь будут появляться иконки выбранной мебели -->
+                <p style="color: var(--muted); font-size: 0.9rem;">Выберите мебель слева, чтобы увидеть её здесь</p>
+              </div>
+              
+              <div class="furniture-summary">
+                <p class="calc-total-label">Стоимость мебели</p>
+                <div class="calc-total-price" id="furniture-total">0 ₽</div>
+                
+                <div class="calc-total-breakdown" id="furniture-breakdown">
+                  <!-- Детализация -->
+                </div>
+                <a href="#request" class="btn btn--primary nav-link" style="width: 100%; margin-top: 24px;">Оставить заявку</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Блок с описанием комплектаций -->
+          <div class="furniture-disclaimer">
+            <p><strong>Из чего складывается стоимость мебели:</strong></p>
+            <ul>
+              <li><b>Кухня (Базовая — 150 000 ₽ / Премиум — 450 000 ₽):</b> гарнитур, столешница, фартук. В Премиум входит встроенная техника (духовой шкаф, варочная панель, посудомоечная машина).</li>
+              <li><b>Гостиная (Базовая — 200 000 ₽ / Премиум — 600 000 ₽):</b> диван, журнальный столик, ТВ-тумба. В Премиум добавляются дизайнерские кресла, ковер и система хранения.</li>
+              <li><b>Спальня (Базовая — 180 000 ₽ / Премиум — 500 000 ₽):</b> кровать с матрасом, шкаф, прикроватные тумбы. В Премиум — кровать с подъемным механизмом, встроенная подсветка и мягкие панели.</li>
+              <li><em>Стоимость указана за комплект под ключ (включая сборку и доставку).</em></li>
+            </ul>
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+        <!-- ВКЛАДКА 5: ЗАЯВКА -->
+    <div id="tab-request" class="tab-content">
+      <section class="section">
+        <div class="container">
+          <div class="section__head">
+            <p class="section__eyebrow">05 — Заявка</p>
+            <h2 class="section__title">Оставить заявку</h2>
+            <p class="section__lead">Оставьте контакты — менеджер свяжется с вами, подберёт квартиру и пришлёт точную смету.</p>
+          </div>
+
+          <div class="request-layout">
+            <!-- Форма -->
+            <form class="request-form" id="request-form">
+              
+              <div class="form-group">
+                <label for="req-name" class="form-label">Ваше имя</label>
+                <input type="text" id="req-name" class="form-input" placeholder="Иван Иванов" required>
+              </div>
+
+              <div class="form-group">
+                <label for="req-phone" class="form-label">Телефон</label>
+                <input type="tel" id="req-phone" class="form-input" placeholder="+7 (999) 123-45-67" required>
+              </div>
+
+              <div class="form-group">
+                <label for="req-apartment" class="form-label">Интересующая квартира (необязательно)</label>
+                <select id="req-apartment" class="form-input">
+                  <option value="">Любая квартира / нужна консультация</option>
+                  <!-- Сюда JS добавит квартиры -->
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="req-comment" class="form-label">Комментарий</label>
+                <textarea id="req-comment" class="form-input" rows="3" placeholder="Например: нужна квартира с мебелью до конца месяца..."></textarea>
+              </div>
+
+              <button type="submit" class="btn btn--primary" style="width: 100%; margin-top: 10px;">Отправить заявку</button>
+            </form>
+
+            <!-- Блок успеха (скрыт по умолчанию) -->
+            <div class="request-success" id="request-success" hidden>
+              <div class="success-icon">✓</div>
+              <h3>Заявка отправлена!</h3>
+              <p>Спасибо, <span id="success-name"></span>. Мы получили ваш номер <span id="success-phone"></span>. Наш менеджер свяжется с вами в ближайшее время.</p>
+              <button class="btn btn--ghost" id="btn-reset-form" style="margin-top: 20px;">Отправить ещё одну</button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+  </main>
+
+  <!-- ПОДВАЛ -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <span class="logo__mark" aria-hidden="true"></span>
+        <p>Атлас Недвижимость — авторские ЖК.<br>Демо-проект.</p>
+      </div>
+      <p class="footer__copy">© <span id="year"></span> Атлас Недвижимость</p>
+    </div>
+  </footer>
+
+  <!-- МОДАЛКА КВАРТИРЫ -->
+  <div class="modal" id="apartment-modal" hidden aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__dialog">
+      <button class="modal__close" data-close aria-label="Закрыть">×</button>
+      <div class="modal__content" id="modal-content"></div>
+    </div>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
